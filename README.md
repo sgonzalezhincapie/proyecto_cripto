@@ -61,7 +61,7 @@ algoritmo, solo tocamos una de las dos carpetas sin romper la otra.
 
 ## Cómo descargar el proyecto
 
-Si el proyecto está en GitHub, clónalo con:
+El proyecto está en GitHub, clónalo con:
 
 ```bash
 git clone https://github.com/saantigh/proyecto_cripto.git

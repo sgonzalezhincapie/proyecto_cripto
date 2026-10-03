@@ -1,10 +1,12 @@
 # Programa Encriptar
 
 Programa con interfaz gráfica simple, hecho en Python, para
-**encriptar y desencriptar archivos de texto**. Cifra tanto el
-**contenido** como el **nombre** del archivo original, usando
-cifrado simétrico **AES** (a través de la librería `cryptography`,
-específicamente su implementación `Fernet`).
+**encriptar y desencriptar archivos de texto**. Cifra el contenido
+usando cifrado simétrico **AES** (a través de la librería
+`cryptography`, específicamente su implementación `Fernet`). El
+archivo cifrado conserva visible el nombre original seguido de
+`.cif` (por ejemplo, `documento.txt.cif`), así que el nombre no queda
+oculto.
 
 Funciona igual en **Windows, Linux (cualquier distribución) y macOS**.
 
@@ -153,15 +155,18 @@ archivo que seleccionas**. Siempre crea un archivo nuevo:
 
 **Al encriptar** `documento.txt`:
 1. Se **abre y se lee** `documento.txt` (solo lectura).
-2. Se cifra el nombre `"documento.txt"` y el contenido, por separado.
-3. Se **crea un archivo nuevo** llamado `documento.txt.cif` con todo
-   cifrado adentro.
+2. Se crea `documento.txt.cif`; su nombre visible permite reconocer
+  el archivo de origen. El formato también guarda una copia cifrada
+  del nombre para restaurarlo al desencriptar, pero no lo oculta en
+  el sistema de archivos.
+3. Se **crea un archivo nuevo** llamado `documento.txt.cif` con el
+  contenido cifrado.
 4. `documento.txt` (el original) **queda intacto**, sin tocar.
 
 **Al desencriptar** `documento.txt.cif`:
 1. Se **abre y se lee** `documento.txt.cif` (solo lectura).
-2. Se descifra el nombre original y el contenido usando la
-   contraseña ingresada.
+2. Se descifra el contenido y la copia interna del nombre usando la
+  contraseña ingresada.
 3. Se **crea un archivo nuevo** con el nombre original recuperado
    (`documento.txt`).
 4. `documento.txt.cif` **queda intacto**, sin tocar.
@@ -268,7 +273,9 @@ avisar.
      exactos, sin que Python intente interpretarlos como texto.
   3. Genera un salt aleatorio con `os.urandom(16)`.
   4. Deriva la llave y crea el objeto `Fernet`.
-  5. Cifra el nombre del archivo y su contenido por separado.
+  5. Cifra el contenido y una copia interna del nombre, que se usa
+     para restaurarlo al desencriptar. El nombre visible del `.cif`
+     sigue siendo el original más la extensión `.cif`.
   6. Escribe un archivo `.cif` nuevo con: firma + salt + longitud del
      nombre cifrado + nombre cifrado + contenido cifrado.
   7. Devuelve la ruta del archivo `.cif` creado.
@@ -329,7 +336,8 @@ Todo en binario, en este orden:
 
 Ni la firma ni el salt son secretos: son necesarios para poder
 descifrar después, y no revelan nada sobre el contenido real del
-archivo.
+archivo. Aunque el nombre almacenado dentro del formato está cifrado,
+el nombre visible del archivo `.cif` no se oculta.
 
 ---
 

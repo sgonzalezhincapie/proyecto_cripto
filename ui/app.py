@@ -111,6 +111,9 @@ class App(tk.Tk):
                 ruta_salida = crypto_utils.desencriptar_archivo(self.ruta_archivo, password, carpeta_salida)
                 self._log(f"Archivo desencriptado con éxito:\n{ruta_salida}")
 
+            self.entry_password.delete(0, tk.END)
+            self.ruta_archivo = None
+            self.label_archivo.configure(text="(ningún archivo seleccionado)", fg="gray")
             messagebox.showinfo("Listo", "Operación completada. Revisa el registro.")
 
         except crypto_utils.CryptoError as e:
